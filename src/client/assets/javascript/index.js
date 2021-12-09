@@ -326,7 +326,7 @@ async function getTracks() {
 		console.log(trackList);
 		return trackList;
 	} catch (err) {
-		console.log('error fetching the tracks', err);
+		console.log('error fetching tracks', err);
 	}	
 };
 
@@ -337,7 +337,7 @@ async function getRacers() {
 		console.log(carList);
 		return carList;
 	} catch (err) {
-		console.log('error fetching the cars', err);
+		console.log('error fetching cars', err);
 	}	
 };
 
