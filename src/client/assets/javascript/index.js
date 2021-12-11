@@ -83,7 +83,7 @@ async function handleCreateRace() {
 	// const race = TODO - invoke the API call to create the race, then save the result
 	if (!player_id || !track_id)
     return alert('Please pick a race and a track');
-	const currentRace = createRace(player_id, track_id);
+	const currentRace = await createRace(player_id, track_id);
 
 	// TODO - update the store with the race id
 	store = {
@@ -92,7 +92,7 @@ async function handleCreateRace() {
   };
 
 	// render starting UI
-	renderAt('#race', renderRaceStartView(newlyStartedRace.Track, newlyStartedRace.Cars))
+	renderAt('#race', renderRaceStartView(newlyStartedRace.track, newlyStartedRace.cars))
 
 	// The race has been created, now start the countdown
 	// TODO - call the async function runCountdown
