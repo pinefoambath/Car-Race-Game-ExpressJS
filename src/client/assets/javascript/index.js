@@ -353,12 +353,21 @@ function createRace(player_id, track_id) {
 		body: JSON.stringify(body)
 	})
 	.then(res => res.json())
-	.catch(err => console.log("Problem with createRace request::", err))
+	.catch(err => console.log("Problem with createRace request:", err))
 }
 
-function getRace(id) {
+async function getRace(id) {
 	// GET request to `${SERVER}/api/races/${id}`
-}
+	try {
+		const race = await fetch(`{SERVER}/api/races/${id}`);
+		const raceInfo = await race.json();
+		console.log(raceInfo);
+		return raceInfo;
+	} catch (err) {
+		console.log('error fetching race information', err);
+	}	
+};
+
 
 function startRace(id) {
 	return fetch(`${SERVER}/api/races/${id}/start`, {
