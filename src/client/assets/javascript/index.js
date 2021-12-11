@@ -74,8 +74,7 @@ async function delay(ms) {
 
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
-	// render starting UI
-	renderAt('#race', renderRaceStartView())
+
 
 	// TODO - Get player_id and track_id from the store
 	const player_id = store.player_id;
@@ -91,6 +90,9 @@ async function handleCreateRace() {
     ...store,
     race_id: newRace.ID - 1
   };
+
+	// render starting UI
+	renderAt('#race', renderRaceStartView(newlyStartedRace.Track, newlyStartedRace.Cars))
 
 	// The race has been created, now start the countdown
 	// TODO - call the async function runCountdown
@@ -400,7 +402,7 @@ async function getRace(id) {
 		console.log(raceInfo);
 		return raceInfo;
 	} catch (err) {
-		console.log('error fetching race information', err);
+		console.log('Problem in getRace request', err);
 	}	
 };
 
@@ -411,7 +413,7 @@ function startRace(id) {
 		...defaultFetchOpts(),
 	})
 	.then(res => res.json())
-	.catch(err => console.log("Problem with getRace request::", err))
+	.catch(err => console.log("Problem with startRace request", err))
 }
 
 function accelerate(id) {
