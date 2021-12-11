@@ -34,7 +34,10 @@ async function onPageLoad() {
 
 function setupClickHandlers() {
 	document.addEventListener('click', function(event) {
-		const { target } = event
+		const { target } = event;
+		const { parentElement } = target;
+		
+		if (parentElement.matches('.card')) target.parentElement.click();
 
 		// Race track form field
 		if (target.matches('.card.track')) {
@@ -75,7 +78,6 @@ async function delay(ms) {
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
 
-
 	// TODO - Get player_id and track_id from the store
 	const player_id = store.player_id;
 	const track_id = store.track_id;
@@ -88,19 +90,23 @@ async function handleCreateRace() {
 	// TODO - update the store with the race id
 	store = {
     ...store,
-    race_id: newRace.ID - 1
+    race_id: currentRace.ID - 1
   };
 
+
 	// render starting UI
-	renderAt('#race', renderRaceStartView(newlyStartedRace.track, newlyStartedRace.cars))
+	renderAt('#race', renderRaceStartView(currentRace.track, currentRace.cars))
 
 	// The race has been created, now start the countdown
 	// TODO - call the async function runCountdown
 	const newCountdown = await runCountdown();
 	// TODO - call the async function startRace
+	console.log(`I'm the store  ${store}`)
 	const newlyStartedRace = await startRace (store.race_id);
 	// TODO - call the async function runRace
 	runRace(store.race_id);
+
+
 }
 
 function runRace(raceID) {
@@ -122,7 +128,10 @@ function runRace(raceID) {
 	*/
 
 	let raceSegment = setInterval(async () => {
-		let currentRace = await getRace(raceID);
+		let currentRace = await getRace(raceID - 1).then((race) => {
+      store = Object.assign(store, { race });
+    });
+
 
 		if (currentRace.status === 'in-progress') {
 			renderAt('#leaderBoard', raceProgress(currentRace.positions));
@@ -274,7 +283,7 @@ function renderCountdown(count) {
 function renderRaceStartView(track, racers) {
 	return `
 		<header>
-			<h1>Race: ${track.name}</h1>
+			<h1>Race: TRACK NAME HERE</h1>
 		</header>
 		<main id="two-columns">
 			<section id="leaderBoard">
@@ -396,27 +405,25 @@ function createRace(player_id, track_id) {
 
 async function getRace(id) {
 	// GET request to `${SERVER}/api/races/${id}`
-	try {
-		const race = await fetch(`{SERVER}/api/races/${id}`);
-		const raceInfo = await race.json();
-		console.log(raceInfo);
-		return raceInfo;
-	} catch (err) {
-		console.log('Problem in getRace request', err);
-	}	
-};
-
+  try {
+    const response = await fetch(`${SERVER}/api/races/${id}`);
+    return await response.json();
+  } catch (error) {
+    console.log('Problem with getRace request', error);
+  }
+}
 
 function startRace(id) {
+	console.log(`STARTED THE RACE and the id is ${id}`)
 	return fetch(`${SERVER}/api/races/${id}/start`, {
 		method: 'POST',
 		...defaultFetchOpts(),
 	})
-	.then(res => res.json())
 	.catch(err => console.log("Problem with startRace request", err))
 }
 
 function accelerate(id) {
+	console.log(id)
 	return fetch(`${SERVER}/api/races/${id}/accelerate`, {
     method: 'POST'
   }).catch(error => console.log('An error ocurred in te accelerate request', error));
