@@ -7,6 +7,9 @@ var store = {
 	race_id: undefined,
 }
 
+let raceInterval = null;
+let countdownInterval = null;
+
 // We need our javascript to wait until the DOM is loaded
 document.addEventListener("DOMContentLoaded", function() {
 	onPageLoad()
@@ -85,27 +88,26 @@ async function handleCreateRace() {
 	// const race = TODO - invoke the API call to create the race, then save the result
 	if (!player_id || !track_id)
     return alert('Please pick a race and a track');
-	const currentRace = await createRace(player_id, track_id);
+	const newRace = await createRace(player_id, track_id);
 
 	// TODO - update the store with the race id
 	store = {
     ...store,
-    race_id: currentRace.ID - 1
+    race_id: newRace.ID - 1
   };
 
 
 	// render starting UI
-	renderAt('#race', renderRaceStartView(currentRace.track, currentRace.cars))
+	renderAt('#race', renderRaceStartView(newRace.track, newRace.cars))
 
 	// The race has been created, now start the countdown
 	// TODO - call the async function runCountdown
 	const newCountdown = await runCountdown();
 	// TODO - call the async function startRace
 	console.log(`I'm the store  ${store}`)
-	const newlyStartedRace = await startRace (store.race_id);
+	const startedRace = await startRace (store.race_id);
 	// TODO - call the async function runRace
 	runRace(store.race_id);
-
 
 }
 
@@ -127,16 +129,14 @@ function runRace(raceID) {
 		reslove(res) // resolve the promise
 	*/
 
-	let raceSegment = setInterval(async () => {
-		let currentRace = await getRace(raceID - 1).then((race) => {
-      store = Object.assign(store, { race });
-    });
+	let raceInterval = setInterval(async () => {
+		let currentRace = await getRace(raceID);
 
 
 		if (currentRace.status === 'in-progress') {
 			renderAt('#leaderBoard', raceProgress(currentRace.positions));
 		} else {
-			clearInterval(raceSegment);
+			clearInterval(raceInterval);
 			renderAt('#race', resultsView(currentRace.positions)); 
 			resolve(currentRace); 
 		}
