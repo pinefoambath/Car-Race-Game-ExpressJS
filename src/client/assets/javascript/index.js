@@ -7,9 +7,6 @@ var store = {
 	race_id: undefined,
 }
 
-let raceInterval = null;
-let countdownInterval = null;
-
 // We need our javascript to wait until the DOM is loaded
 document.addEventListener("DOMContentLoaded", function() {
 	onPageLoad()
@@ -30,7 +27,7 @@ async function onPageLoad() {
 				renderAt('#racers', html)
 			})
 	} catch(error) {
-		console.log("Problem getting tracks and racers ::", error.message)
+		console.log("Problem getting tracks and racers", error.message)
 		console.error(error)
 	}
 }
@@ -102,10 +99,10 @@ async function handleCreateRace() {
 
 	// The race has been created, now start the countdown
 	// TODO - call the async function runCountdown
-	const newCountdown = await runCountdown();
+	await runCountdown();
 	// TODO - call the async function startRace
 	console.log(`I'm the store  ${store}`)
-	const startedRace = await startRace (store.race_id);
+	await startRace (store.race_id);
 	// TODO - call the async function runRace
 	runRace(store.race_id);
 
@@ -316,7 +313,7 @@ function resultsView(positions) {
 
 function raceProgress(positions) {
 	let userPlayer = positions.find(e => e.id === store.player_id)
-	userPlayer.driver_name += " (you)"
+	userPlayer.driver_name += " (** you **)"
 
 	positions = positions.sort((a, b) => (a.segment > b.segment) ? -1 : 1)
 	let count = 1
@@ -400,7 +397,7 @@ function createRace(player_id, track_id) {
 		body: JSON.stringify(body)
 	})
 	.then(res => res.json())
-	.catch(err => console.log("Problem with createRace request:", err))
+	.catch(err => console.log("Problem with createRace request", err))
 }
 
 async function getRace(id) {
