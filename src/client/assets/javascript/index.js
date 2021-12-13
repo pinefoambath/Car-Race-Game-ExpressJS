@@ -93,16 +93,17 @@ async function handleCreateRace() {
     race_id: newRace.ID - 1
   };
 
-
 	// render starting UI
 	renderAt('#race', renderRaceStartView(newRace.track, newRace.cars))
 
 	// The race has been created, now start the countdown
 	// TODO - call the async function runCountdown
 	await runCountdown();
+
 	// TODO - call the async function startRace
 	console.log(`I'm the store  ${store}`)
 	await startRace (store.race_id);
+
 	// TODO - call the async function runRace
 	runRace(store.race_id);
 
