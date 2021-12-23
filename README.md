@@ -6,7 +6,7 @@ This is a basic Express.JS app, built to familiarize myself with asynchronous pr
 
 ## Getting Started
 
-In order to build this game, you need to run two things: the game engine API and the front end.
+In order to play this game, you need to run two things: the game engine API and the front end.
 
 ### Start the Server
 
@@ -27,19 +27,17 @@ If you are using a windows machine:
 2. Run the following command to add the environment variable:
 ```set DATA_FILE=./data.json```
 
-If you still run into issues running the API server on your machine, you can run this project in the Udacity classroom.
-
 
 ### Start the Frontend
 
-First, run your preference of `npm install && npm start` or `yarn && yarn start` at the root of this project. Then you should be able to access http://localhost:3000.
+Run your preference of `npm install && npm start` or `yarn && yarn start` at the root of this project. Then you should be able to access http://localhost:3000.
 
 
 ### API Calls
 
 The API calls are all at the bottom of the file: `src/client/assets/javascript/index.js`.
 
-Below are a list of the API endpoints and the shape of the data they return. These are all of the endpoints you need to complete the game. Consult this information often as you complete the project:
+Below are a list of the API endpoints and the shape of the data they return
 
 [GET] `api/tracks`
 List of all tracks
