@@ -1,8 +1,8 @@
-# Welcome to my car race simulator
+# Car race simulator
 
 ## Project Introduction
 
-This is a basic Express.JS app, built to familiarize myself with asynchronous programming in JavaScript.
+This is an Express / Node.js app, built to familiarize myself with asynchronous programming in JavaScript.
 
 ## Getting Started
 
